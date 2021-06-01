@@ -1,17 +1,25 @@
+import express from 'express';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {renderToString} from 'react-dom/server';
+import Home from './client/components/Home/Home.jsx';
+const app = express();
+const port = 3000;
+app.use(express.static('public'));
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+app.get('/', (req, res) => {
+    const content = renderToString(<Home />);
+    const html = `
+        <html>
+            <head></head>
+            <body>
+                <div id="root">${content}</div>
+                <script src="bundle.js"></script>
+            </body>
+        </html>
+    `;
+    res.send(html);
+})
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+app.listen(port, () => {
+    console.log('Listen on Port 3000');
+})

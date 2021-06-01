@@ -1,4 +1,5 @@
 module.exports = {
+    mode: 'none',
     // this will tell webpack to run Babel on every file
     module: {
         rules: [
